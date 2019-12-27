@@ -1,0 +1,33 @@
+version: "3"
+services:
+    db:
+        image: postgres:latest
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_DB=keys
+    server:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        ports:
+            - 5000:5000
+        volumes:
+            - ./server:/usr/app
+        depends_on:
+            - db
+    client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        ports:
+            - 3000:3000
+        depends_on:
+            - server
+        volumes:
+            - ./client:/usr/app
+        environment:
+            - NODE_ENV=development
