@@ -1,5 +1,5 @@
 import random
-import bcrypt
+from Crypto.Hash import keccak
 
 
 def generate_new_address():
@@ -9,9 +9,9 @@ def generate_new_address():
 
 def encrypt(address):
     normalized_address = normalize(address)
-    salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(normalized_address.encode(), salt)
-    return hashed.decode()
+    keccak_hash = keccak.new(digest_bits=256)
+    keccak_hash.update(normalized_address.encode("utf8"))
+    return keccak_hash.hexdigest()
 
 
 def normalize(address):

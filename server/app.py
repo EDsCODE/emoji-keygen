@@ -1,12 +1,12 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort, make_response
 from flask_cors import CORS
 import json
 
 from src.emoji_encoder import encode, decode
-from src.crypto import generate_new_address, encrypt, normalize
+from src.crypto import generate_new_address, encrypt
 from src.config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 from src.models import db, PrivateKey
-from src.repo import get_all, add_instance
+from src.repo import get_all, add_instance, get
 
 
 def create():
@@ -23,8 +23,8 @@ def create():
 app = create()
 
 
-# Description: Test endpoint
-@app.route('/')
+# Description: Test endpoint to view all database data and see how information is stored
+@app.route('/all')
 def hello():
     keys = get_all(PrivateKey)
     all_keys = []
@@ -37,33 +37,23 @@ def hello():
         all_keys.append(new_key)
     return json.dumps(all_keys), 200
 
-
-@app.route('/add', methods=['POST'])
-def add():
-    data = request.json
-    hash_key = data['hash']
-    name = data['name']
-
-    add_instance(PrivateKey, hash_key=hash_key, name=name)
-    return json.dumps("Added"), 200
-
 # Description: Accepts a name and generates a new address that's encoded in emojis
 # Params: name (String)
 # Return: emoji string (String)
 @app.route('/new', methods=["POST"])
 def generate_address():
     data = request.json
+    name = data["name"]
 
-    # generate an address
+    # generate an address and incode
     new_address = generate_new_address()
-
-    # encode into emojis
     encoded_address = encode(new_address)
 
-    # TODO: encrypt and save into database with name
+    # encrypt and save into database with name
+    encrypted_address = encrypt(new_address)
+    add_instance(PrivateKey, hash_key=encrypted_address, name=name)
 
-    # return emoji encoding
-    return jsonify(original_address=new_address, encoded=encoded_address)
+    return jsonify(original_address=new_address, encoded=encoded_address), 200
 
 # Description: Accepts an emoji string and returns name associated with encoded address
 # Params: emoji String (String)
@@ -71,15 +61,21 @@ def generate_address():
 @app.route('/decode', methods=["GET"])
 def decode_address():
     encoded_sequence = request.args.get('key')
-    # decode emoji encoding
+
+    # decode emoji encoding and use query using hash
     decoded_sequence = decode(encoded_sequence)
+    encrypted_address = encrypt(decoded_sequence)
+    result = get(PrivateKey, encrypted_address)
 
-    # TODO: hash resulting address
+    # return associated name if match exists otherwise return error
+    if result is None:
+        abort(404)
+    return jsonify(decoded_address=result.name), 200
 
-    # TODO: perform lookup in postgres
 
-    # TODO: return associated name if match exists otherwise return error
-    return jsonify(decoded_adress=decoded_sequence)
+@app.errorhandler(404)
+def no_associated_key(error):
+    return make_response(jsonify({'error': 'No Associated Key'}), 404)
 
 
 if __name__ == '__main__':
