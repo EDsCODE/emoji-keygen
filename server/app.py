@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, abort, make_response
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
 
@@ -69,13 +69,8 @@ def decode_address():
 
     # return associated name if match exists otherwise return error
     if result is None:
-        abort(404)
+        return jsonify({'error': 'No Associated Key'}), 404
     return jsonify(decoded_address=result.name), 200
-
-
-@app.errorhandler(404)
-def no_associated_key(error):
-    return make_response(jsonify({'error': 'No Associated Key'}), 404)
 
 
 if __name__ == '__main__':
