@@ -26,6 +26,8 @@ Arguments in body:
 | --------- | -------- | -------------------------------------------------------------------- |
 | `name`    | `string` | **Required**. Information you want associated with the generated key |
 
+---
+
 ```
 GET /info
 ```
@@ -37,6 +39,8 @@ Query parameters:
 | Parameter | Type             | Description                                                     |
 | --------- | ---------------- | --------------------------------------------------------------- |
 | `key`     | `emoji sequence` | **Required**. The sequence that will be decoded and queried for |
+
+---
 
 ```
 GET /all
