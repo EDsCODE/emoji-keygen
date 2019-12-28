@@ -29,5 +29,6 @@ services:
             - server
         volumes:
             - ./client:/usr/app
+            - /usr/app/node_modules/
         environment:
             - NODE_ENV=development
