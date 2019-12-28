@@ -21,9 +21,10 @@ POST /emoji
 Provided a name, the endpoint will return an emoji sequence that is associated with a private key. The private key is stored in the database as the primary key to the name provided.
 
 Arguments in body:
-| Parameter | Type | Description |
-| :-------- | :------- | :------------------------------------------------------------------- |
-| `name` | `string` | **Required**. Information you want associated with the generated key |
+
+| Parameter | Type     | Description                                                          |
+| --------- | -------- | -------------------------------------------------------------------- |
+| `name`    | `string` | **Required**. Information you want associated with the generated key |
 
 ```
 GET /info
@@ -32,9 +33,10 @@ GET /info
 Provided an emoji sequence, the endpoint will decode it and search for an existing key. If found, the related contents will be returned.
 
 Query parameters:
-| Parameter | Type | Description |
-| :-------- | :--------------- | :-------------------------------------------------------------- |
-| `key` | `emoji sequence` | **Required**. The sequence that will be decoded and queried for |
+
+| Parameter | Type             | Description                                                     |
+| --------- | ---------------- | --------------------------------------------------------------- |
+| `key`     | `emoji sequence` | **Required**. The sequence that will be decoded and queried for |
 
 ```
 GET /all
