@@ -40,7 +40,7 @@ def hello():
 # Description: Accepts a name and generates a new address that's encoded in emojis
 # Params: name (String)
 # Return: emoji string (String)
-@app.route('/new', methods=["POST"])
+@app.route('/emoji', methods=["POST"])
 def generate_address():
     data = request.json
     name = data["name"]
@@ -58,7 +58,7 @@ def generate_address():
 # Description: Accepts an emoji string and returns name associated with encoded address
 # Params: emoji String (String)
 # Return: name (String)
-@app.route('/decode', methods=["GET"])
+@app.route('/info', methods=["GET"])
 def decode_address():
     encoded_sequence = request.args.get('key')
 

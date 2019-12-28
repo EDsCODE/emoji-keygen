@@ -9,7 +9,7 @@ def generate_new_address():
 
 def encrypt(address):
     normalized_address = normalize(address)
-    keccak_hash = keccak.new(digest_bits=256)
+    keccak_hash = keccak.new(digest_bits=384)
     keccak_hash.update(normalized_address.encode("utf8"))
     return keccak_hash.hexdigest()
 
