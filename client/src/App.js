@@ -18,7 +18,7 @@ export default class App extends Component {
     }
 
     submitName = () => {
-        if (this.state.name.length == 0) {
+        if (this.state.name.length === 0) {
             this.clearState();
             return;
         }
@@ -49,7 +49,7 @@ export default class App extends Component {
             method: "GET"
         })
             .then(results => {
-                if (results.status != 200) {
+                if (results.status !== 200) {
                     this.handleError(results.status);
                 }
                 return results.json();
@@ -62,7 +62,7 @@ export default class App extends Component {
     };
 
     handleError = code => {
-        if (code == 404) {
+        if (code === 404) {
             this.setState({
                 error: "No associated key"
             });
@@ -165,9 +165,9 @@ export default class App extends Component {
                     this.state.returned_emoji_key.length > 0 ? (
                         <Resultbox color="lightgreen">
                             <p2>
-                                <b>Emoji sequence: </b>
-                                {this.state.returned_emoji_key}
+                                <b>Emoji Sequence:</b>
                             </p2>
+                            <p2>{this.state.returned_emoji_key}</p2>
                         </Resultbox>
                     ) : null}
                     {this.state.returned_name != null &&
@@ -175,8 +175,8 @@ export default class App extends Component {
                         <Resultbox color="lightgreen">
                             <p2>
                                 <b>Stored name: </b>
-                                {this.state.returned_name}
                             </p2>
+                            <p2>{this.state.returned_name}</p2>
                         </Resultbox>
                     ) : null}
                     {this.state.error != null && this.state.error.length > 0 ? (
