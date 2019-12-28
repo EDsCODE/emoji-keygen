@@ -1,0 +1,10 @@
+.resultbox-container {
+    position: relative;
+    padding: 25px;
+    border-radius: 10px;
+    background-color: lightskyblue;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
